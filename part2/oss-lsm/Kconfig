@@ -1,0 +1,8 @@
+config SECURITY_OSS
+	bool "oss support"
+	depends on SECURITY
+	default n
+	help
+	  This selects oss-lsm, a custom module created in Feb 2023 as part of 		  Assignment 4.
+
+	  If you are unsure how to answer this question, answer N.
