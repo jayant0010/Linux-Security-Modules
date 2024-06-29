@@ -1,0 +1,57 @@
+     1	--- Desktop/yama_lsm.c	2023-02-20 11:17:24.927011783 -0500
+     2	+++ linux/security/yama/yama_lsm.c	2023-02-20 07:11:07.613377636 -0500
+     3	@@ -23,6 +23,8 @@
+     4	 #include <linux/sched.h>
+     5	 #include <linux/spinlock.h>
+     6	 
+     7	+#include <linux/time.h>
+     8	+#include <linux/cred.h>
+     9	 
+    10	 #define YAMA_SCOPE_DISABLED	0
+    11	 #define YAMA_SCOPE_RELATIONAL	1
+    12	@@ -431,6 +433,28 @@
+    13	 }
+    14	 
+    15	 
+    16	+/*Assignment 4 Define the hook function for settimeofday system call */
+    17	+
+    18	+static int yama_settime(const struct timespec *ts, const struct timezone *tz)
+    19	+{
+    20	+    struct timespec now;
+    21	+    getnstimeofday(&now);
+    22	+
+    23	+    if(!ts){
+    24	+      return -EFAULT;
+    25	+    }
+    26	+
+    27	+/* Check if the time is set to a value earlier than the current system time */
+    28	+    if (timespec_compare(ts, &now) < 0) {
+    29	+        pr_info("Yama: Assignment 4 Attempt to set time to an earlier value rejected\n");
+    30	+        return -EPERM;
+    31	+    }
+    32	+
+    33	+	pr_info("Yama: Assignment 4 Attempt to set time allowed\n");
+    34	+    /* Allow the time to be set */
+    35	+    return 0;
+    36	+}
+    37	+
+    38	 
+    39	 
+    40	 static struct security_hook_list yama_hooks[] __lsm_ro_after_init = {
+    41	@@ -438,6 +462,7 @@
+    42	 	LSM_HOOK_INIT(ptrace_traceme, yama_ptrace_traceme),
+    43	 	LSM_HOOK_INIT(task_prctl, yama_task_prctl),
+    44	 	LSM_HOOK_INIT(task_free, yama_task_free),
+    45	+	LSM_HOOK_INIT(settime, yama_settime),
+    46	 };
+    47	 
+    48	 #ifdef CONFIG_SYSCTL
+    49	@@ -489,7 +514,7 @@
+    50	 
+    51	 void __init yama_add_hooks(void)
+    52	 {
+    53	-	pr_info("Yama: becoming mindful.\n");
+    54	+	pr_info("Yama: Assignment 4 becoming mindful.\n");
+    55	 	security_add_hooks(yama_hooks, ARRAY_SIZE(yama_hooks), "yama");
+    56	 	yama_init_sysctl();
+    57	 }
