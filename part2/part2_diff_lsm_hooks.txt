@@ -1,0 +1,13 @@
+     1	--- backup/linux/lsm_hooks.h	2023-02-18 17:17:13.337461000 -0500
+     2	+++ /home/jayc/linux/include/linux/lsm_hooks.h	2023-02-20 06:25:05.766522344 -0500
+     3	@@ -2025,5 +2025,10 @@
+     4	 #else
+     5	 static inline void loadpin_add_hooks(void) { };
+     6	 #endif
+     7	+#ifdef CONFIG_SECURITY_OSS
+     8	+extern void __init oss_add_hooks(void);
+     9	+#else
+    10	+static inline void __init oss_add_hooks(void) { }
+    11	+#endif
+    12	 
+    13	 #endif /* ! __LINUX_LSM_HOOKS_H */

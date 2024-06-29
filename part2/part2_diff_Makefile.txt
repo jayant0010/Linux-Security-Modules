@@ -1,0 +1,18 @@
+     1	--- backup/linux/linux_security/Makefile	2023-02-18 17:17:15.193482000 -0500
+     2	+++ /home/jayc/linux/security/Makefile	2023-02-20 07:09:31.458100673 -0500
+     3	@@ -10,6 +10,7 @@
+     4	 subdir-$(CONFIG_SECURITY_APPARMOR)	+= apparmor
+     5	 subdir-$(CONFIG_SECURITY_YAMA)		+= yama
+     6	 subdir-$(CONFIG_SECURITY_LOADPIN)	+= loadpin
+     7	+subdir-$(CONFIG_SECURITY_OSS)		+= oss-lsm
+     8	 
+     9	 # always enable default capabilities
+    10	 obj-y					+= commoncap.o
+    11	@@ -26,6 +27,7 @@
+    12	 obj-$(CONFIG_SECURITY_YAMA)		+= yama/
+    13	 obj-$(CONFIG_SECURITY_LOADPIN)		+= loadpin/
+    14	 obj-$(CONFIG_CGROUP_DEVICE)		+= device_cgroup.o
+    15	+obj-$(CONFIG_SECURITY_OSS)		+= oss-lsm/
+    16	 
+    17	 # Object integrity file lists
+    18	 subdir-$(CONFIG_INTEGRITY)		+= integrity
